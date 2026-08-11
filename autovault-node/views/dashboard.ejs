@@ -1,0 +1,51 @@
+<%- include('partials/header') %>
+<div class="space-y-8">
+    <div>
+        <h1 class="text-3xl font-extrabold text-white">Operations Dashboard</h1>
+        <p class="text-gray-400 text-sm mt-1">Real-time inventory metrics backed by Supabase Postgres</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-gray-900 border border-gray-800 p-6 rounded-xl">
+            <p class="text-xs uppercase tracking-wider text-gray-400 font-semibold">TOTAL UNITS</p>
+            <p class="text-3xl font-extrabold text-white mt-2"><%= total %></p>
+        </div>
+        <div class="bg-gray-900 border border-gray-800 p-6 rounded-xl">
+            <p class="text-xs uppercase tracking-wider text-gray-400 font-semibold">TOTAL VALUATION</p>
+            <p class="text-3xl font-extrabold text-emerald-400 mt-2">$<%= valuation.toLocaleString('en-US', { minimumFractionDigits: 2 }) %></p>
+        </div>
+    </div>
+
+    <div class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+        <div class="p-6 border-b border-gray-800 flex justify-between items-center">
+            <h2 class="text-lg font-bold text-white">Recently Added</h2>
+            <a href="/inventory" class="text-xs text-emerald-400 hover:underline">View All →</a>
+        </div>
+        <table class="w-full text-left text-sm">
+            <thead class="bg-gray-950/50 text-gray-400 uppercase text-xs border-b border-gray-800">
+                <tr>
+                    <th class="py-3 px-6">ID</th>
+                    <th class="py-3 px-6">Item</th>
+                    <th class="py-3 px-6">Year</th>
+                    <th class="py-3 px-6">Price</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-800 text-gray-300">
+                <% recentCars.forEach(car => { %>
+                <tr>
+                    <td class="py-4 px-6 text-gray-500">#<%= car.id %></td>
+                    <td class="py-4 px-6 font-bold text-white"><%= car.make %> <%= car.model %></td>
+                    <td class="py-4 px-6"><%= car.year %></td>
+                    <td class="py-4 px-6 text-emerald-400">$<%= Number(car.price).toLocaleString('en-US', { minimumFractionDigits: 2 }) %></td>
+                </tr>
+                <% }) %>
+                <% if (recentCars.length === 0) { %>
+                <tr>
+                    <td colspan="4" class="py-8 text-center text-gray-500">No records found. Click "+ Add Vehicle" above!</td>
+                </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
+<%- include('partials/footer') %>
