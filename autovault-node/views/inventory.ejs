@@ -3,7 +3,7 @@
     <div class="flex justify-between items-center">
         <div>
             <h1 class="text-3xl font-extrabold text-white">Vault Inventory</h1>
-            <p class="text-gray-400 text-sm mt-1">Manage active listings and records</p>
+            <p class="text-gray-400 text-sm mt-1">Manage active listings and technical specs</p>
         </div>
         <a href="/inventory/add" class="bg-emerald-500 text-gray-950 px-4 py-2 rounded font-bold hover:bg-emerald-400 transition">+ Add Vehicle</a>
     </div>
@@ -13,8 +13,9 @@
             <thead class="bg-gray-950/50 text-gray-400 uppercase text-xs border-b border-gray-800">
                 <tr>
                     <th class="py-3 px-6">ID</th>
-                    <th class="py-3 px-6">Item</th>
-                    <th class="py-3 px-6">Year</th>
+                    <th class="py-3 px-6">Vehicle Spec</th>
+                    <th class="py-3 px-6">Powertrain</th>
+                    <th class="py-3 px-6">Year / Mileage</th>
                     <th class="py-3 px-6">Price</th>
                     <th class="py-3 px-6 text-right">Actions</th>
                 </tr>
@@ -22,10 +23,20 @@
             <tbody class="divide-y divide-gray-800 text-gray-300">
                 <% cars.forEach(car => { %>
                 <tr>
-                    <td class="py-4 px-6 text-gray-500">#<%= car.id %></td>
-                    <td class="py-4 px-6 font-bold text-white"><%= car.make %> <%= car.model %></td>
-                    <td class="py-4 px-6"><%= car.year %></td>
-                    <td class="py-4 px-6 text-emerald-400">$<%= Number(car.price).toLocaleString('en-US', { minimumFractionDigits: 2 }) %></td>
+                    <td class="py-4 px-6 text-gray-500 font-mono">#<%= car.id %></td>
+                    <td class="py-4 px-6">
+                        <div class="font-bold text-white"><%= car.make %> <%= car.model %></div>
+                        <div class="text-xs text-gray-500 font-mono uppercase"><%= car.vin || 'NO VIN RECORDED' %></div>
+                    </td>
+                    <td class="py-4 px-6">
+                        <div class="text-sm"><%= car.engine_type || 'N/A' %></div>
+                        <div class="text-xs text-emerald-400 font-mono"><%= car.fuel_type || 'N/A' %> • <%= car.transmission || 'N/A' %></div>
+                    </td>
+                    <td class="py-4 px-6">
+                        <div><%= car.year %></div>
+                        <div class="text-xs text-gray-500 font-mono"><%= car.mileage ? Number(car.mileage).toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 2 }) + ' km' : '0 km' %></div>
+                    </td>
+                    <td class="py-4 px-6 text-emerald-400 font-bold">$<%= Number(car.price).toLocaleString('en-US', { minimumFractionDigits: 2 }) %></td>
                     <td class="py-4 px-6 text-right">
                         <a href="/inventory/delete/<%= car.id %>" onclick="return confirm('Delete record?')" class="text-red-400 border border-red-500/20 bg-red-500/10 px-3 py-1 rounded text-xs hover:bg-red-500/20">Delete</a>
                     </td>
@@ -33,7 +44,9 @@
                 <% }) %>
                 <% if (cars.length === 0) { %>
                 <tr>
-                    <td colspan="5" class="py-8 text-center text-gray-500">Vault empty. Add a vehicle to populate inventory.</td>
+                    <td colspan="6" class="py-8 text-center text-gray-500 font-mono">
+                        Vault empty. No technical specs recorded yet. Click "+ Add Vehicle" above!
+                    </td>
                 </tr>
                 <% } %>
             </tbody>

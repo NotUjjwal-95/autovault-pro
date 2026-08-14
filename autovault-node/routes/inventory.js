@@ -20,16 +20,28 @@ router.get('/add', (req, res) => {
 
 // Create Record
 router.post('/add', async (req, res) => {
-    const { make, model, year, price } = req.body;
+    const { make, model, year, price, vin, engine_type, fuel_type, transmission, mileage } = req.body;
     try {
         await db.query(
-            'INSERT INTO cars (make, model, year, price) VALUES ($1, $2, $3, $4)',
-            [make, model, parseInt(year), parseFloat(price)]
+            `INSERT INTO cars 
+            (make, model, year, price, vin, engine_type, fuel_type, transmission, mileage) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+            [
+                make, 
+                model, 
+                parseInt(year), 
+                parseFloat(price), 
+                vin || null, 
+                engine_type || null, 
+                fuel_type || null, 
+                transmission || null, 
+                parseFloat(mileage) || 0
+            ]
         );
         res.redirect('/inventory');
     } catch (err) {
         console.error(err);
-        res.status(500).send('Error adding record');
+        res.status(500).send('Error adding vehicle specs');
     }
 });
 
